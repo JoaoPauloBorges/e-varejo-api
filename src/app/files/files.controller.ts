@@ -1,27 +1,23 @@
-import {
-  Controller,
-  Post,
-  Param,
-  Delete,
-  UseInterceptors,
-  UploadedFiles,
-} from '@nestjs/common';
+import { Controller, Post, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('files')
+@ApiTags('Upload de Imagens')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('upload')
-  @UseInterceptors(FilesInterceptor('files'))
-  uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-    console.log(files);
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFileArbitrary(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.filesService.remove(+id);
+  @Post('product/:idProduct')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@Param('idProduct') idProduct: number, @UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+    return this.filesService.create(+idProduct, file);
   }
 }

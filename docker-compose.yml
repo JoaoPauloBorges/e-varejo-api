@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: "e-varejo-db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  nodeserver:
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: e-varejo-db
+    build: ./
+    container_name: backend
+    volumes:
+      - .:/code
+    ports:
+      - "3000:3000" 
+    networks:
+      - app-network
+
+networks: 
+  app-network:
+    driver: bridge

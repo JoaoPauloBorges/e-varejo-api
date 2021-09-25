@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "e-varejo",
+  "private_key_id": "73d7c64b757764bf053c6c4fc282f6afc5987efc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDr6SxJfXtRCdsI\ncnwWHXLEgbSIoJ0Pzt2nTzCnu3ESeRRGeekiZW958sA0WCu/SEKaKS4p9tYeY/ES\nx6E7gGmjX3DktzPhKy4EG4yZxAk9gRsBFknM2mjcIKCd4+4YxdTNXT80Yx3zWdUl\nV/9/jJGmbCbbe3hGgCS/GfcYWlRBNu696xCAjDwKojZqENOb9GypR8zSfKU+hA1F\nrcNeRUFMOLVnLptx+vpV28CsZzqX1NwsfKbDgrmv0rr9xM5HbGuZMwdZNjgDD0p3\nsa5xjf6E8XOuy2O5s4pMIrDwMcjUQGn/dmvW8bvNd9qBn7pSD243H+AeXROyEnVm\nCEL43zXzAgMBAAECggEAGPXEv8nNAFgAmrYyNszK1cu7ZDFKLOAAR7FzPmvwnLm+\n0W4YopEE6Gwstd0WU9i7Y0A0KDB7mx+L5CbHAlql0qlIcoqHrK064yhfCe3Z5G4C\ng2zuRgRdz9yL4ei5ylk0GL5i75IFGzhH+vmCiOZAitEqk1JO+XaZbLa8lBEKlROc\nzjeisuvGahUQ5osegfqfCI3U0YydEOJu8vygXH1y0Ud2FOR/bvgQCY0p59B1mIUE\n/q/ioPUMmnH2Ijq2KFvE0hgfIXq9j/R/F1smA3QMVnvfOZZHtfsVHIqdwaZ9bhek\nwKNKGje+0TvKfpCssNgm7K9VBqvhGzfuV7CAh+qrgQKBgQD70sLOsYZh4vaVcvRT\nhehH7K9JTi/MWb3hhLAIJqgQeJ+vCUaxOFQTrZanaT+wDsEGogQApmCRWSOJneJB\nHQoKdu5s7CIvXDYmxbS5MGrHhGefW7UNBdFdx63CPu1Ty8KEmu8Jxqk/+yrsHHXN\nomS+CRFCJC+sJ336+60UZxfPoQKBgQDv0tkRWYcFbg7n8GQoxI+v9Colw5npmYzz\nqFg1TkoluUz+ht192WJqQLQGZbKaFFCyCP+5zDe8G/YhffrnbmSNErocGilonelY\na/rXCDSTIjOFtLiD4e4Fi1V3SOx5lvYmELhPnz29IgY0Fgn6zqXlrqzdZ6WyTL0I\nM1CdYuutEwKBgQCWv1Re52bKslNqo6YfWcnzRHyqJWP3sME6f3PhbUKumYb+AU+Q\nR2gNX50QGrFFc4+ZqOM8gFzOpc3gU+Ndl0Srfwa7rZ/JOiowi6nkMle5mElv3DZF\n1XW/7gjWf1UTFKcdOqJd987ZvkGzllXvA4fLOyJZtc/T/tArrv2teQmIAQKBgQDG\nGI4AzMjA7XYWk/TH0AU4PCEMbJOX56QMKAQkk/SfUH6Ox+vw5j1qsuOBXUO4DgvR\n46kIWe23zgjzBVLZE9Cuzsc4K0wFBFsZFKhwMnDrEBcq3GqFVXv8zGjeTTg3/0B3\nlNwJuOmQbqhdIc9Agq16GVzkzZaKvuRt/6UZO/qcTQKBgCva28GFl0vWORdoCXwL\npDgl2lqgCLXaXpvEYEaHX+FmoreQ8MFzTp1DVHpboBxFkbhfF34FcO23AwNcpUTu\nALlNjLief0r9B3NqHPNv6A4cP4xnYGBnUb123wHrVz9VUCFBh7tfqYiMV4df7MgB\nlTpg1IOAaVT1dQVDct/0rxH1\n-----END PRIVATE KEY-----\n",
+  "client_email": "api-service@e-varejo.iam.gserviceaccount.com",
+  "client_id": "110113040142333675520",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/api-service%40e-varejo.iam.gserviceaccount.com"
+}

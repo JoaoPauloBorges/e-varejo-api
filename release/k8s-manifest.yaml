@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: backend
+        image: gcr.io/e-varejo/backend:v1
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: DB_HOST
+          value: 192.168.80.3 #private ip only accessible in production from inside the cluster
+        - name: DB_USER
+          value: postgres
+        - name: DB_PASS
+          value: postgres
+        - name: DB_NAME
+          value: e-varejo-db
+        - name: BUCKET_URI
+          value: https://storage.googleapis.com
+        - name: BUCKET_NAME
+          value: e-varejo-bucket
+        - name: X-GOOG-PROJECT-ID
+          value: e-varejo
+        - name: SERVICE_ACCOUNT
+          value: api-service@e-varejo.iam.gserviceaccount.com
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: ./e-varejo-73d7c64b7577.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: LoadBalancer
+  selector:
+    app: backend
+  ports:
+  - protocol: TCP
+    name: http-back
+    port: 80 #porta que vai ser exposta
+    targetPort: 3000 #porta no container        
+
