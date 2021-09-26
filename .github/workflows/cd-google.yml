@@ -7,7 +7,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: cluster-1
   GKE_ZONE: southamerica-east1-a
-  BACK_DEPLOYMENT_NAME: backend-deployment
+  DEPLOYMENT_NAME: backend-deployment
   CONTAINER_NAME: backend
 
 jobs:
@@ -56,8 +56,8 @@ jobs:
 
     - name: Deploy
       run: |-
-        kubectl set image deployment $BACK_DEPLOYMENT_NAME $CONTAINER_NAME=gcr.io/$PROJECT_ID/backend:${{ steps.tag_name.outputs.SOURCE_TAG }}
-        kubectl rollout status deployment/$BACK_DEPLOYMENT_NAMES
+        kubectl set image deployment $DEPLOYMENT_NAME $CONTAINER_NAME=gcr.io/$PROJECT_ID/backend:${{ steps.tag_name.outputs.SOURCE_TAG }}
+        kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
 
       
