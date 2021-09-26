@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Param, Delete, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,16 +8,18 @@ import { ApiTags } from '@nestjs/swagger';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFileArbitrary(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-  }
-
   @Post('product/:idProduct')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@Param('idProduct') idProduct: number, @UploadedFile() file: Express.Multer.File) {
+  async uploadFile(
+    @Param('idProduct') idProduct: number,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<string> {
     console.log(file);
     return this.filesService.create(+idProduct, file);
+  }
+
+  @Delete()
+  async deleteFile(@Query('filename') filename: string) {
+    return this.filesService.remove([filename])
   }
 }
