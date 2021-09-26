@@ -40,27 +40,23 @@ jobs:
         location: ${{ env.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
 
-    - name: Branch name
-      id: branch_name
-      run: |
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
-          
-    - name: echo tag version
-      run: echo $SOURCE_TAG
+    - name: Get Tag name
+      id: tag_name
+      run: echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
 
 ####################################################################################################################################
 
     # Build the Backend Docker image
     - name: Build
-      run: docker build . -t "gcr.io/$PROJECT_ID/backend:${{ steps.branch_name.outputs.SOURCE_TAG }}"
+      run: docker build . -t "gcr.io/$PROJECT_ID/backend:${{ steps.tag_name.outputs.SOURCE_TAG }}"
           
    # Push the Backend Docker image to Google Container Registry
     - name: Publish
-      run: docker push "gcr.io/$PROJECT_ID/backend:${{ steps.branch_name.outputs.SOURCE_TAG }}"
+      run: docker push "gcr.io/$PROJECT_ID/backend:${{ steps.tag_name.outputs.SOURCE_TAG }}"
 
     - name: Deploy
       run: |-
-        kubectl set image deployment $BACK_DEPLOYMENT_NAME $CONTAINER_NAME=gcr.io/$PROJECT_ID/backend:${{ steps.branch_name.outputs.SOURCE_TAG }}
+        kubectl set image deployment $BACK_DEPLOYMENT_NAME $CONTAINER_NAME=gcr.io/$PROJECT_ID/backend:${{ steps.tag_name.outputs.SOURCE_TAG }}
         kubectl rollout status deployment/$BACK_DEPLOYMENT_NAMES
         kubectl get services -o wide
 

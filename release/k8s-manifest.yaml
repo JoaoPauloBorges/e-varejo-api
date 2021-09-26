@@ -14,31 +14,43 @@ spec:
     spec:
       serviceAccountName: default
       containers:
-      - name: backend
-        image: gcr.io/e-varejo/backend:v1
-        ports:
-        - containerPort: 3000
-        env:
-        - name: NODE_ENV
-          value: production
-        - name: DB_HOST
-          value: 192.168.80.3 #private ip only accessible in production from inside the cluster
-        - name: DB_USER
-          value: postgres
-        - name: DB_PASS
-          value: postgres
-        - name: DB_NAME
-          value: e-varejo-db
-        - name: BUCKET_URI
-          value: https://storage.googleapis.com
-        - name: BUCKET_NAME
-          value: e-varejo-bucket
-        - name: X-GOOG-PROJECT-ID
-          value: e-varejo
-        - name: SERVICE_ACCOUNT
-          value: api-service@e-varejo.iam.gserviceaccount.com
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: ./e-varejo-73d7c64b7577.json
+        - name: backend
+          image: gcr.io/e-varejo/backend:v1.0.1
+          ports:
+          - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DB_HOST
+              value: 192.168.80.3 #private ip only accessible in production from inside the cluster
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASS
+              value: postgres
+            - name: DB_NAME
+              value: e-varejo-db
+            - name: BUCKET_URI
+              value: https://storage.googleapis.com
+            - name: BUCKET_NAME
+              value: e-varejo-bucket
+            - name: X-GOOG-PROJECT-ID
+              value: e-varejo
+            - name: SERVICE_ACCOUNT
+              value: api-cloud-bucket@e-varejo.iam.gserviceaccount.com
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/var/run/secret/cloud.google.com/e-varejo-bucket-key.json"
+          volumeMounts:
+            - name: "service-account"
+              mountPath: "/var/run/secret/cloud.google.com"
+            - name: "certs"
+              mountPath: "/etc/ssl/certs"
+      volumes:
+        - name: "service-account"
+          secret:
+            secretName: "backend-bucket-sa-key"
+        - name: "certs"
+          hostPath: 
+            path: "/etc/ssl/certs"
 ---
 apiVersion: v1
 kind: Service
