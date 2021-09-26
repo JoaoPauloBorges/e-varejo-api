@@ -1,5 +1,5 @@
-import { FilesService } from '@app/files/files.service';
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { GoogleBucketService } from '@app/storage/googleBucket.service';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { WhereOptions } from 'sequelize';
 import { Op } from 'sequelize';
@@ -8,13 +8,14 @@ import { Transaction } from 'sequelize/types';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductDto } from './dto/product.dto';
 import { QueryListProductsDto } from './dto/query-list-products.tdo';
+import { ProductImageOperation } from './entities/product-image-operations.enum';
 import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product) private productModel: typeof Product,
-    @Inject(forwardRef(() => FilesService)) private filesService: FilesService,
+    private googleBucketService: GoogleBucketService,
     private sequelize: Sequelize,
   ) {}
 
@@ -69,35 +70,58 @@ export class ProductsService {
     return result;
   }
 
-  async possibleConcurrentUpdate(idProduct: number, publicFilename: string, transaction: Transaction) {
-    const product = await this.findOne(idProduct, transaction);
-    product.images = [...(product.images || []), publicFilename];
-    await product.save({ transaction });
-    await transaction.commit();
+  async removeProduct(id: number) {
+    const product = await this.findOne(id);
+    await this.removeImgsFromBucket(product.images || []);
+
+    await product.destroy();
   }
 
-  async updateImages(idProduct: number, publicFilename: string) {
-    const t1 = await this.sequelize.transaction();
+  async removeImgFromProduct(idProduct: number, imgUrl: string) {
+    const transaction = await this.sequelize.transaction();
     try {
-      await this.possibleConcurrentUpdate(idProduct, publicFilename, t1);
+      this.updateProductImagesList(idProduct, imgUrl, transaction, ProductImageOperation.REMOVE);
+      await this.removeImgsFromBucket([imgUrl]);
+      await transaction.commit();
     } catch (err) {
-      await t1.rollback();
-      console.error('erro no update, aguardando para tentar novamente', err);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const t2 = await this.sequelize.transaction();
-      try {
-        await this.possibleConcurrentUpdate(idProduct, publicFilename, t2);
-      } catch (err) {
-        await t2.rollback();
-        throw err;
-      }
+      await transaction.rollback();
+      throw err;
     }
   }
 
-  async remove(id: number) {
-    const product = await this.findOne(id);
-    await this.filesService.remove(product.images || []);
+  async saveImg(idProduct: number, file: Express.Multer.File): Promise<string> {
+    const t1 = await this.sequelize.transaction();
+    try {
+      const publicFilename = await this.googleBucketService.saveFile(file);
+      await this.updateProductImagesList(idProduct, publicFilename, t1, ProductImageOperation.ADD);
+      await t1.commit();
+      return publicFilename;
+    } catch (err) {
+      await t1.rollback();
+      throw new InternalServerErrorException('Erro ao realizar upload da imagem');
+    }
+  }
 
-    await product.destroy();
+  private async updateProductImagesList(
+    idProduct: number,
+    publicFilename: string,
+    transaction: Transaction,
+    op = ProductImageOperation.ADD,
+  ) {
+    const product = await this.findOne(idProduct, transaction);
+
+    if (op == ProductImageOperation.ADD) {
+      product.images = [...(product.images || []), publicFilename];
+    } else {
+      product.images = product.images.filter((img) => img !== publicFilename);
+    }
+
+    await product.save({ transaction });
+  }
+
+  private async removeImgsFromBucket(imgs: string[]) {
+    for (const img of imgs) {
+      await this.googleBucketService.deleteFile(img);
+    }
   }
 }

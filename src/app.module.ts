@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { FilesModule } from '@app/files/files.module';
 import { ProductsModule } from '@app/products/products.module';
 import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import { Product } from '@app/products/entities/product.entity';
@@ -18,6 +17,6 @@ const sequelizeOptions: SequelizeModuleOptions = {
 };
 
 @Module({
-  imports: [SequelizeModule.forRoot(sequelizeOptions), FilesModule, ProductsModule],
+  imports: [SequelizeModule.forRoot(sequelizeOptions), ProductsModule],
 })
 export class AppModule {}
