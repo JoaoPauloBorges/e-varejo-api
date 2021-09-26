@@ -3,7 +3,7 @@ FROM node:15.10.0-alpine3.11
 WORKDIR /code
 
 COPY ./package.json /code
-RUN yarn install --production
+RUN yarn install
 
 COPY . .
 
