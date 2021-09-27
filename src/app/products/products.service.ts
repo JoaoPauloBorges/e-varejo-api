@@ -32,8 +32,8 @@ export class ProductsService {
       where = {
         ...where,
         [Op.or]: [
-          { description: { [Op.iLike]: `${params.search}%` } },
-          { productName: { [Op.iLike]: `${params.search}%` } },
+          { description: { [Op.iLike]: `%${params.search}%` } },
+          { productName: { [Op.iLike]: `%${params.search}%` } },
         ],
       };
     }
