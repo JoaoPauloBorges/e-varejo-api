@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "prestartProd": "cross-env NODE_ENV=production yarn run migration && cross-env NODE_ENV=production yarn run seed",
+    "prestartProd": "cross-env NODE_ENV=production yarn run migration",
     "startProd": "cross-env NODE_ENV=production node dist/main",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",
